@@ -2,9 +2,96 @@
   "$schema": "../gen/schemas/desktop-schema.json",
   "identifier": "default",
   "description": "Capability for the main window",
-  "windows": ["main"],
+  "windows": [
+    "main"
+  ],
   "permissions": [
     "core:default",
-    "opener:default"
+    "opener:default",
+    {
+      "identifier": "http:default",
+      "allow": [
+        {
+          "url": "https://github.com"
+        },
+        {
+          "url": "https://*.github.com"
+        }
+      ]
+    },
+    {
+      "identifier": "upload:allow-download",
+      "allow": [
+        {
+          "url": "https://github.com"
+        },
+        {
+          "url": "https://*.github.com"
+        }
+      ]
+    },
+    {
+      "identifier": "fs:scope",
+      "allow": [
+        {
+          "path": "$APPLOCALDATA/HeroesOfValor/*"
+        },
+        {
+          "path": "$DOWNLOAD/*"
+        },
+        {
+          "path": "**/steamapps/common/**"
+        }
+      ]
+    },
+    "fs:allow-watch",
+    "fs:allow-unwatch",
+    "fs:allow-read-dir",
+    "fs:allow-download-write",
+    "fs:allow-download-read",
+    {
+      "identifier": "shell:allow-execute",
+      "allow": [
+        {
+          "name": "get-game-path",
+          "cmd": "REG",
+          "args": [
+            "QUERY",
+            "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\Steam App 3317910"
+          ]
+        },
+        {
+          "name": "extract-UE4SS",
+          "cmd": "tar",
+          "args": [
+            "-xf",
+            {
+              "validator": ".*UE4SS.zip"
+            },
+            "-C",
+            {
+              "validator": ".*Win64"
+            }
+          ]
+        },
+        {
+          "name": "is-game-open",
+          "cmd": "powershell",
+          "args": [
+            "-Command",
+            "Get-Process -Name \"HeroesOfValor\" -ErrorAction SilentlyContinue"
+          ]
+        }
+      ]
+    },
+    {
+      "identifier": "opener:allow-open-path",
+      "allow": [
+        {
+          "path": "steam://run/3317910"
+        }
+      ]
+    },
+    "dialog:default"
   ]
 }

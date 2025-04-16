@@ -10,6 +10,9 @@
     "frontendDist": "../build"
   },
   "app": {
+    "trayIcon": {
+      "iconPath": "icons/icon.png"
+    },
     "windows": [
       {
         "title": "hov-companion",
@@ -31,5 +34,6 @@
       "icons/icon.icns",
       "icons/icon.ico"
     ]
-  }
+  },
+  "mainBinaryName": "hov-companion"
 }

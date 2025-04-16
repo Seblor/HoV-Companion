@@ -1,6 +1,14 @@
 @import 'tailwindcss';
+@import "flyonui/variants.css"; /* Required for Js components */
 
 @plugin '@tailwindcss/typography';
+
+@plugin "flyonui" {
+   themes: light --default, black --prefersdark;
+}
+@plugin "@iconify/tailwind4";
+
+@source "../node_modules/flyonui/flyonui/index.js"; /* Required for Js components */
 
 /*
   The default border color has changed to `currentcolor` in Tailwind CSS v4,
@@ -17,5 +25,15 @@
   ::backdrop,
   ::file-selector-button {
     border-color: var(--color-gray-200, currentcolor);
+  }
+}
+
+@theme {
+  --animate-reverse-spin: reverse-spin 1s linear infinite;
+
+  @keyframes reverse-spin {
+    from {
+      transform: rotate(360deg);
+    }
   }
 }

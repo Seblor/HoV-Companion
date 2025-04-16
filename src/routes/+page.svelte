@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { getDownloadLink } from "$lib/client/queries";
   import { invoke } from "@tauri-apps/api/core";
 
   let name = $state("");
@@ -9,6 +10,13 @@
     // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
     greetMsg = await invoke("greet", { name });
   }
+
+  let downloadLink = $state("");
+
+  getDownloadLink().then((link) => {
+    console.log(link);
+    downloadLink = link ?? "";
+  });
 </script>
 
 <main class="container">
@@ -16,29 +24,13 @@
 
   <form class="row" onsubmit={greet}>
     <input id="greet-input" placeholder="Enter a name..." bind:value={name} />
-    <button type="submit">Greet</button>
+    <button type="submit" class="btn">Greet</button>
   </form>
   <p>{greetMsg}</p>
+  <p>{downloadLink}</p>
 </main>
 
 <style>
-
-:root {
-  font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
-  font-size: 16px;
-  line-height: 24px;
-  font-weight: 400;
-
-  color: #0f0f0f;
-  background-color: #f6f6f6;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-text-size-adjust: 100%;
-}
-
 .container {
   margin: 0;
   padding-top: 10vh;
@@ -46,35 +38,6 @@
   flex-direction: column;
   justify-content: center;
   text-align: center;
-}
-
-.row {
-  display: flex;
-  justify-content: center;
-}
-
-#greet-input {
-  margin-right: 5px;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    color: #f6f6f6;
-    background-color: #2f2f2f;
-  }
-
-  a:hover {
-    color: #24c8db;
-  }
-
-  input,
-  button {
-    color: #ffffff;
-    background-color: #0f0f0f98;
-  }
-  button:active {
-    background-color: #0f0f0f69;
-  }
 }
 
 </style>
