@@ -1,6 +1,6 @@
 [package]
 name = "hov-companion"
-version = "0.1.0"
+version = "0.1.1"
 description = "A companion app for managing Heroes of Valor mods"
 authors = ["Seblor"]
 edition = "2021"
