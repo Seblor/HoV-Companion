@@ -131,7 +131,7 @@
 				class="flex grow overflow-auto"
 				style="height: calc(100% - var(--spacing) * 17)"
 			> -->
-			<div class="flex grow overflow-auto">
+			<div class="flex grow overflow-auto min-h-fit">
 				{@render children()}
 			</div>
 		</div>

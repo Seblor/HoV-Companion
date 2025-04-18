@@ -51,7 +51,7 @@ async function selectGameDir() {
 }
 </script>
 
-<div class="flex flex-col grow justify-between m-2 gap-8">
+<div class="flex flex-col grow justify-between mx-2">
   <div class="w-full flex items-center gap-4">
     <div class="grow m-8">
       <label class="label-text" for="game-path">Game install path</label>

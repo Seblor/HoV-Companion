@@ -1,3 +1,1 @@
-censor_usernames      = false -- Replace usernames with a special character
-censor_usernames_char = "*"   -- Character to replace usernames with
-max_censor_chars      = 3     -- Maximum number of characters to replaced
+rotate_daily      = true -- Whether the log file is archived every day

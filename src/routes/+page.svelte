@@ -18,7 +18,7 @@ getDownloadLink().then((link) => {
 });
 </script>
 
-<main class="flex flex-col justify-center items-center size-full" style="flex-flow: wrap;">
+<main class="flex flex-col justify-center items-center size-full">
   <h1 class="text-3xl m-2">
     Welcome to the <span class="italic text-amber-400 font-bold"
       >Heroes of Valor</span
