@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { afterNavigate, goto } from "$app/navigation";
   import { page } from "$app/state";
   import { editConfigVariable, getModConfig } from "$lib/client/queries";
   import { modsDir, modsList } from "$lib/client/stores";
@@ -7,7 +8,19 @@
   const modName = page.params.modName;
   let config: Awaited<ReturnType<typeof getModConfig>> = $state({});
 
-  modsList.subscribe(() => {
+  afterNavigate(() => {
+    if ($modsDir) {
+      getModConfig($modsDir, modName).then((configData) => {
+        config = configData;
+      });
+    }
+  });
+
+  modsList.subscribe((newModsList) => {
+    if (!Object.keys(newModsList).includes(modName)) {
+      goto("/");
+      return;
+    }
     if ($modsDir) {
       getModConfig($modsDir, modName).then((configData) => {
         config = configData;
@@ -91,7 +104,7 @@
             />
           {/if}
           {#if param.comment?.trim()}
-            <span class="helper-text">{param.comment}</span>
+            <span class="helper-text text-wrap">{param.comment}</span>
           {/if}
         </fieldset>
       {/each}
@@ -106,7 +119,7 @@
           </p>
         {:else}
           <p class="helper-text">
-            There is no <kbd class="kbd">options.txt</kbd> file in the mod's folder.
+            There is no <kbd class="kbd">config.txt</kbd> file in the mod's folder.
           </p>
         {/if}
       </div>

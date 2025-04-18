@@ -1,1 +1,1 @@
-rotate_daily      = true -- Whether the log file is archived every day
+daily_logfile      = true -- If enabled, a different new log file will be created every day. Otherwise the file `ChatLogs.txt` will be used.

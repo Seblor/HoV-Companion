@@ -332,9 +332,7 @@ export async function getModConfig (
   modName: string,
 ): Promise<Record<string, ConfigVariable> | null> {
   const modConfigPath = `${modsPath}\\${modName}\\config.txt`;
-  console.log({ modConfigPath });
   if (await exists(modConfigPath)) {
-    console.log(`Mod config found at ${modConfigPath}`);
     const config = await readTextFile(modConfigPath);
     return luaToObject(config);
   }

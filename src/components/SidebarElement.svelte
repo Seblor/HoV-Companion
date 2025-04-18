@@ -31,7 +31,7 @@ let isManaged = $derived(MODS_ICONS[props.modName] !== undefined);
 <li class="w-full tooltip [--placement:right]">
   <!-- svelte-ignore a11y_invalid_attribute -->
   <a
-    href={isManaged ? `/mod/${props.modName}` : "#"}
+    href="/mod/{props.modName}"
     class="flex rounded-2xl!
     {pageTitle === props.modName ? 'bg-white/10' : ''}
     {isManaged ? 'text-white' : 'text-white/50'} w-full tooltip-toggle truncate"
