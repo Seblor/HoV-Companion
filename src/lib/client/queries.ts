@@ -14,6 +14,7 @@ import { Command } from "@tauri-apps/plugin-shell";
 import { humanFileSize } from "$lib/utils";
 import { openPath } from "@tauri-apps/plugin-opener";
 import { modsDir, status } from "./stores";
+import { getVersion } from "@tauri-apps/api/app";
 
 export async function getDownloadLink () {
   // const response = await fetch("https://api.github.com/repos/UE4SS-RE/RE-UE4SS/releases");
@@ -428,6 +429,20 @@ export async function editConfigVariable ({
 export function startGame () {
   openPath("steam://run/3317910");
 }
+
+export async function checkForUpdate (): Promise<{ newUpdateAvailable: boolean, latestUpdateVersion: string, currentVersion: string }> {
+  const apiUrl = 'https://api.github.com/repos/Seblor/HoV-Companion/releases/latest';
+
+  const response = await fetch(apiUrl);
+  const data = await response.json();
+  const latestVersion = data.tag_name;
+  const currentVersion = await getVersion();
+  if (latestVersion === currentVersion || latestVersion === `v${currentVersion}`) {
+    return { newUpdateAvailable: false, latestUpdateVersion: latestVersion, currentVersion };
+  }
+  return { newUpdateAvailable: latestVersion !== undefined, latestUpdateVersion: latestVersion, currentVersion };
+}
+
 
 type ConfigVariable = {
   varName: string;

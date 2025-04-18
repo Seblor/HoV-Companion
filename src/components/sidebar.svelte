@@ -5,6 +5,7 @@ import { MODS_ICONS } from "$lib/consts";
 import { HSStaticMethods } from "flyonui/flyonui";
 import { onMount } from "svelte";
 import SidebarElement from "./SidebarElement.svelte";
+    import VersionSidebar from "./VersionSidebar.svelte";
 
 onMount(() => {
 	HSStaticMethods.autoInit();
@@ -58,6 +59,72 @@ let pageTitle = $derived(
         {#each managedMods as [mod, isEnabled]}
           <SidebarElement {isEnabled} modName={mod} />
         {/each}
+        {#each managedMods as [mod, isEnabled]}
+          <SidebarElement {isEnabled} modName={mod} />
+        {/each}
+        {#each managedMods as [mod, isEnabled]}
+          <SidebarElement {isEnabled} modName={mod} />
+        {/each}
+        {#each managedMods as [mod, isEnabled]}
+          <SidebarElement {isEnabled} modName={mod} />
+        {/each}
+        {#each managedMods as [mod, isEnabled]}
+          <SidebarElement {isEnabled} modName={mod} />
+        {/each}
+        {#each managedMods as [mod, isEnabled]}
+          <SidebarElement {isEnabled} modName={mod} />
+        {/each}
+        {#each managedMods as [mod, isEnabled]}
+          <SidebarElement {isEnabled} modName={mod} />
+        {/each}
+        {#each managedMods as [mod, isEnabled]}
+          <SidebarElement {isEnabled} modName={mod} />
+        {/each}
+        {#each managedMods as [mod, isEnabled]}
+          <SidebarElement {isEnabled} modName={mod} />
+        {/each}
+        {#each managedMods as [mod, isEnabled]}
+          <SidebarElement {isEnabled} modName={mod} />
+        {/each}
+        {#each managedMods as [mod, isEnabled]}
+          <SidebarElement {isEnabled} modName={mod} />
+        {/each}
+        {#each managedMods as [mod, isEnabled]}
+          <SidebarElement {isEnabled} modName={mod} />
+        {/each}
+        {#each managedMods as [mod, isEnabled]}
+          <SidebarElement {isEnabled} modName={mod} />
+        {/each}
+        {#each managedMods as [mod, isEnabled]}
+          <SidebarElement {isEnabled} modName={mod} />
+        {/each}
+        {#each managedMods as [mod, isEnabled]}
+          <SidebarElement {isEnabled} modName={mod} />
+        {/each}
+        {#each managedMods as [mod, isEnabled]}
+          <SidebarElement {isEnabled} modName={mod} />
+        {/each}
+        {#each managedMods as [mod, isEnabled]}
+          <SidebarElement {isEnabled} modName={mod} />
+        {/each}
+        {#each managedMods as [mod, isEnabled]}
+          <SidebarElement {isEnabled} modName={mod} />
+        {/each}
+        {#each managedMods as [mod, isEnabled]}
+          <SidebarElement {isEnabled} modName={mod} />
+        {/each}
+        {#each managedMods as [mod, isEnabled]}
+          <SidebarElement {isEnabled} modName={mod} />
+        {/each}
+        {#each managedMods as [mod, isEnabled]}
+          <SidebarElement {isEnabled} modName={mod} />
+        {/each}
+        {#each managedMods as [mod, isEnabled]}
+          <SidebarElement {isEnabled} modName={mod} />
+        {/each}
+        {#each managedMods as [mod, isEnabled]}
+          <SidebarElement {isEnabled} modName={mod} />
+        {/each}
       {/if}
       {#if unmanagedMods.length}
         <div class="divider text-base-content/50">Unmanaged Mods</div>
@@ -66,5 +133,8 @@ let pageTitle = $derived(
         {/each}
       {/if}
     </ul>
+  </div>
+  <div>
+    <VersionSidebar />
   </div>
 </aside>
