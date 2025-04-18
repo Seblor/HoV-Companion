@@ -3,12 +3,12 @@
 	import { afterNavigate } from "$app/navigation";
 	import { HSOverlay, HSStaticMethods } from "flyonui/flyonui";
 	import { page } from "$app/state";
-	import { startGame } from "$lib/client/queries";
+	import { forceCloseGame, startGame } from "$lib/client/queries";
 	import { onMount, tick } from "svelte";
 	import { isGameRunning, modsList, status } from "$lib/client/stores";
 	import Sidebar from "../components/Sidebar.svelte";
-	import { debounce, throttle } from "lodash";
-    import { get } from "svelte/store";
+	import { get } from "svelte/store";
+    import { confirm } from "@tauri-apps/plugin-dialog";
 
 	afterNavigate(() => {
 		// Runs after navigating between pages
@@ -23,15 +23,26 @@
 			?.replace(/^\w/, (c) => c.toUpperCase()) || "Home",
 	);
 
-	let modal: HSOverlay | null = null;
+	let loadingModal: HSOverlay | null = null;
 	let isModalOpen = false;
-	let nextModalOpenState = false;
+
+	let gameRunningModal: HSOverlay | null = null;
 
 	onMount(async () => {
-		const element = document.querySelector("#loading-modal") as HTMLElement;
-		if (element) {
-			modal = new HSOverlay(element);
+		const loadingModalElement = document.querySelector(
+			"#loading-modal",
+		) as HTMLElement;
+		if (loadingModalElement) {
+			loadingModal = new HSOverlay(loadingModalElement);
 		}
+
+		const gameRunningModalElement = document.querySelector(
+			"#game-running-modal",
+		) as HTMLElement;
+		if (gameRunningModalElement) {
+			gameRunningModal = new HSOverlay(gameRunningModalElement);
+		}
+
 		await tick();
 		await new Promise((resolve) => setTimeout(resolve, 100));
 		HSStaticMethods.autoInit();
@@ -39,21 +50,29 @@
 
 	status.subscribe((s) => {
 		if (s.progress === -1) {
-			modal?.close();
+			loadingModal?.close();
 			isModalOpen = false;
 		} else if (s.progress !== -1) {
-			modal?.open();
+			loadingModal?.open();
 			isModalOpen = true;
 		}
 	});
 
 	modsList.subscribe(() => {
 		if (get(status).progress === -1) {
-			modal?.close();
+			loadingModal?.close();
 			isModalOpen = false;
 		} else {
-			modal?.open();
+			loadingModal?.open();
 			isModalOpen = true;
+		}
+	});
+
+	isGameRunning.subscribe((running) => {
+		if (running) {
+			gameRunningModal?.open();
+		} else {
+			gameRunningModal?.close();
 		}
 	});
 </script>
@@ -88,6 +107,34 @@
 						>
 					</div>
 				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- GAME RUNNING MODAL -->
+<div
+	id="game-running-modal"
+	class="overlay modal overlay-open:opacity-100 overlay-open:duration-300 modal-middle hidden pointer-events-auto bg-black/50 outline-0"
+	role="dialog"
+	data-overlay-keyboard="false"
+	tabindex="-1"
+>
+	<div class="modal-dialog overlay-open:opacity-100 overlay-open:duration-300">
+		<div class="modal-content">
+			<div class="modal-body flex flex-col items-center gap-2 overflow-hidden">
+				The game is running, please close it before changing the settings.
+				<button
+					class="btn btn-error"
+					onclick={async () => {
+						if (
+							await confirm("Are you sure you want to close the game forcefully ?")
+						) {
+							console.log("CONFIRMED");
+							forceCloseGame();
+						}
+					}}>Force close the game</button
+				>
 			</div>
 		</div>
 	</div>

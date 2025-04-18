@@ -46,3 +46,7 @@ modsDir.subscribe(async (value) => {
 setInterval(async () => {
   isGameRunning.set(await checkIsGameRunning());
 }, 1e3);
+
+checkIsGameRunning().then((running) => {
+  isGameRunning.set(running);
+});

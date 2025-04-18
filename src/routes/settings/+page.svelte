@@ -1,54 +1,64 @@
 <script lang="ts">
-import {
-	downloadUE4SS,
-	getGamePath,
-	checkIsGamePathValid,
-	checkIsUE4SSInstalled,
-	installCompanionMods,
-} from "$lib/client/queries";
-import { gameDir, modsDir, modsList } from "$lib/client/stores";
-import { open } from "@tauri-apps/plugin-dialog";
+  import {
+    downloadUE4SS,
+    checkIsGamePathValid,
+    checkIsUE4SSInstalled,
+    getGamePath,
+  } from "$lib/client/queries";
+  import { gameDir, modsDir, modsList } from "$lib/client/stores";
+  import { open } from "@tauri-apps/plugin-dialog";
+  import { onMount } from "svelte";
 
-let gamePath = $state("");
-let isPathValid = $state(false);
-let isUE4SSInstalled = $state(false);
+  let gamePath = $state("");
+  let isPathValid = $state(false);
+  let isUE4SSInstalled = $state(false);
 
-if ($gameDir) {
-	gamePath = $gameDir ?? "";
-} else {
-	updateModloaderInstallState();
-}
+  if ($gameDir) {
+    gamePath = $gameDir ?? "";
+  } else {
+    updateModloaderInstallState();
+  }
 
-modsList.subscribe(() => {
-	checkIsUE4SSInstalled(gamePath).then((installed) => {
-		isUE4SSInstalled = installed;
-	});
-});
+  onMount(async () => {
+    if (!$gameDir) {
+      const gamePathFound = await getGamePath();
+      if (gamePathFound) {
+        gameDir.set(gamePathFound);
+        gamePath = gamePathFound;
+      }
+    }
+  });
 
-$effect(() => {
-	checkIsGamePathValid(gamePath).then((correct) => {
-		isPathValid = correct;
-		if (correct) {
-			gameDir.set(gamePath);
-		}
-	});
-	updateModloaderInstallState();
-});
+  modsList.subscribe(() => {
+    checkIsUE4SSInstalled(gamePath).then((installed) => {
+      isUE4SSInstalled = installed;
+    });
+  });
 
-async function updateModloaderInstallState() {
-	isUE4SSInstalled = await checkIsUE4SSInstalled(gamePath);
-}
+  $effect(() => {
+    checkIsGamePathValid(gamePath).then((correct) => {
+      isPathValid = correct;
+      if (correct) {
+        gameDir.set(gamePath);
+      }
+    });
+    updateModloaderInstallState();
+  });
 
-async function selectGameDir() {
-	const dir = await open({
-		multiple: false,
-		directory: true,
-	});
+  async function updateModloaderInstallState() {
+    isUE4SSInstalled = await checkIsUE4SSInstalled(gamePath);
+  }
 
-	if (dir) {
-		gamePath = dir;
-	}
-}
+  async function selectGameDir() {
+    const dir = await open({
+      multiple: false,
+      directory: true,
+    });
+
+    if (dir) {
+      gamePath = dir;
+    }
+  }
 </script>
 
 <div class="flex flex-col grow justify-between mx-2">

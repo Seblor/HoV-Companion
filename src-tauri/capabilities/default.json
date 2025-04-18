@@ -85,7 +85,14 @@
           "cmd": "powershell",
           "args": [
             "-Command",
-            "Get-Process -Name \"HeroesOfValor\" -ErrorAction SilentlyContinue"
+            "Get-Process -Name \"HeroesOfValor-Win64-Shipping\" -ErrorAction SilentlyContinue"
+          ]
+        }, {
+          "name": "force-close-game",
+          "cmd": "powershell",
+          "args": [
+            "-Command",
+            "Stop-Process -Name \"HeroesOfValor-Win64-Shipping\" -Force"
           ]
         }
       ]

@@ -324,6 +324,16 @@ export async function checkIsGameRunning (): Promise<boolean> {
   }
 }
 
+export async function forceCloseGame () {
+  try {
+    const command = Command.create("force-close-game");
+    await command.execute();
+    return true;
+  } catch (error) {
+    return false;
+  }
+}
+
 /**
  * Gets the mod's config. Returns null if the mod isn't found.
  */

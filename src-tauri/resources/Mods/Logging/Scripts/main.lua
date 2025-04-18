@@ -1,6 +1,25 @@
+local conf = {
+  daily_logfile = true
+} -- to keep it separate from the global env
+
+local currentModDirectory = debug.getinfo(1, "S").source:match("@?(.+\\Mods\\[^\\]+)")
+local f, err = loadfile(currentModDirectory .. [[\config.txt]], "t", conf)
+
+if f then
+  f() -- run the chunk
+else
+  print("[LogChat] ❌ Failed to load config file: " .. tostring(err) .. "\n")
+end
+
 -- Helper function to log to file
 local function LogToFile(user, message, is_special)
-  local log_file = io.open(os.getenv("LOCALAPPDATA") .. "/HeroesOfValor/Saved/Logs/ChatLog.txt", "a")
+  local log_file = io.open(
+    os.getenv("LOCALAPPDATA") .. "/HeroesOfValor/Saved/Logs/" ..
+    (
+      conf.daily_logfile
+      and string.format("%s.txt", os.date("%Y-%m-%d"))
+      or 'ChatLog.txt'
+    ), "a")
   if log_file then
     local time = os.date("%Y-%m-%d %H:%M:%S")
     local line = string.format("[%s] %s: %s\n", time, user, message)

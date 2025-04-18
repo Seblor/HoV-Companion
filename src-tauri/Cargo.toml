@@ -1,8 +1,8 @@
 [package]
 name = "hov-companion"
 version = "0.1.0"
-description = "A Tauri App"
-authors = ["you"]
+description = "A companion app for managing Heroes of Valor mods"
+authors = ["Seblor"]
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
