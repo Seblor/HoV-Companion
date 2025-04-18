@@ -18,7 +18,7 @@
 
 <div class="flex justify-center grow min-h-full">
   {#if $modsDir && config && Object.keys(config).length > 0}
-    <div class="flex justify-center flex-wrap h-fit gap-6 p-8">
+    <div class="flex justify-center flex-wrap h-fit gap-6 py-8 px-2">
       {#each Object.values(config) as param}
         <fieldset
           class="flex flex-col fieldset w-xs bg-base-100/50 border border-primary p-4 rounded-box gap-2 truncate"
