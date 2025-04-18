@@ -2,6 +2,7 @@
   import { page } from "$app/state";
   import { editConfigVariable, getModConfig } from "$lib/client/queries";
   import { modsDir, modsList } from "$lib/client/stores";
+  import { debounce } from "lodash";
 
   const modName = page.params.modName;
   let config: Awaited<ReturnType<typeof getModConfig>> = $state({});
@@ -15,9 +16,9 @@
   });
 </script>
 
-<div class="flex justify-center h-fit">
+<div class="flex justify-center grow min-h-full">
   {#if $modsDir && config && Object.keys(config).length > 0}
-    <div class="flex justify-center flex-wrap gap-6 p-8">
+    <div class="flex justify-center flex-wrap h-fit gap-6 p-8">
       {#each Object.values(config) as param}
         <fieldset
           class="flex flex-col fieldset w-xs bg-base-100/50 border border-primary p-4 rounded-box gap-2 truncate"
@@ -63,7 +64,7 @@
               type="number"
               class="input"
               value={param.value}
-              oninput={(event) => {
+              oninput={debounce((event) => {
                 const newValue = (event.target as HTMLInputElement).value;
                 editConfigVariable({
                   modsPath: $modsDir,
@@ -71,14 +72,14 @@
                   variableName: param.varName,
                   newValue: Number(newValue),
                 });
-              }}
+              }, 1e3)}
             />
           {:else if typeof param.value === "string"}
             <input
               type="text"
               class="input"
               value={param.value}
-              oninput={(event) => {
+              oninput={debounce((event) => {
                 const newValue = (event.target as HTMLInputElement).value;
                 editConfigVariable({
                   modsPath: $modsDir,
@@ -86,11 +87,11 @@
                   variableName: param.varName,
                   newValue,
                 });
-              }}
+              }, 1e3)}
             />
           {/if}
-          {#if param.comment}
-            <span class="helper-text text-center">{param.comment}</span>
+          {#if param.comment?.trim()}
+            <span class="helper-text">{param.comment}</span>
           {/if}
         </fieldset>
       {/each}

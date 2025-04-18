@@ -59,72 +59,6 @@ let pageTitle = $derived(
         {#each managedMods as [mod, isEnabled]}
           <SidebarElement {isEnabled} modName={mod} />
         {/each}
-        {#each managedMods as [mod, isEnabled]}
-          <SidebarElement {isEnabled} modName={mod} />
-        {/each}
-        {#each managedMods as [mod, isEnabled]}
-          <SidebarElement {isEnabled} modName={mod} />
-        {/each}
-        {#each managedMods as [mod, isEnabled]}
-          <SidebarElement {isEnabled} modName={mod} />
-        {/each}
-        {#each managedMods as [mod, isEnabled]}
-          <SidebarElement {isEnabled} modName={mod} />
-        {/each}
-        {#each managedMods as [mod, isEnabled]}
-          <SidebarElement {isEnabled} modName={mod} />
-        {/each}
-        {#each managedMods as [mod, isEnabled]}
-          <SidebarElement {isEnabled} modName={mod} />
-        {/each}
-        {#each managedMods as [mod, isEnabled]}
-          <SidebarElement {isEnabled} modName={mod} />
-        {/each}
-        {#each managedMods as [mod, isEnabled]}
-          <SidebarElement {isEnabled} modName={mod} />
-        {/each}
-        {#each managedMods as [mod, isEnabled]}
-          <SidebarElement {isEnabled} modName={mod} />
-        {/each}
-        {#each managedMods as [mod, isEnabled]}
-          <SidebarElement {isEnabled} modName={mod} />
-        {/each}
-        {#each managedMods as [mod, isEnabled]}
-          <SidebarElement {isEnabled} modName={mod} />
-        {/each}
-        {#each managedMods as [mod, isEnabled]}
-          <SidebarElement {isEnabled} modName={mod} />
-        {/each}
-        {#each managedMods as [mod, isEnabled]}
-          <SidebarElement {isEnabled} modName={mod} />
-        {/each}
-        {#each managedMods as [mod, isEnabled]}
-          <SidebarElement {isEnabled} modName={mod} />
-        {/each}
-        {#each managedMods as [mod, isEnabled]}
-          <SidebarElement {isEnabled} modName={mod} />
-        {/each}
-        {#each managedMods as [mod, isEnabled]}
-          <SidebarElement {isEnabled} modName={mod} />
-        {/each}
-        {#each managedMods as [mod, isEnabled]}
-          <SidebarElement {isEnabled} modName={mod} />
-        {/each}
-        {#each managedMods as [mod, isEnabled]}
-          <SidebarElement {isEnabled} modName={mod} />
-        {/each}
-        {#each managedMods as [mod, isEnabled]}
-          <SidebarElement {isEnabled} modName={mod} />
-        {/each}
-        {#each managedMods as [mod, isEnabled]}
-          <SidebarElement {isEnabled} modName={mod} />
-        {/each}
-        {#each managedMods as [mod, isEnabled]}
-          <SidebarElement {isEnabled} modName={mod} />
-        {/each}
-        {#each managedMods as [mod, isEnabled]}
-          <SidebarElement {isEnabled} modName={mod} />
-        {/each}
       {/if}
       {#if unmanagedMods.length}
         <div class="divider text-base-content/50">Unmanaged Mods</div>
@@ -134,6 +68,7 @@ let pageTitle = $derived(
       {/if}
     </ul>
   </div>
+  <div class="divider"></div>
   <div>
     <VersionSidebar />
   </div>

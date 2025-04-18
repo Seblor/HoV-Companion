@@ -286,9 +286,31 @@ export async function setModEnabled (
   const modEnabledFile = `${modsDir}\\${modName}\\enabled.txt`;
   const isAlreadyEnabled = await exists(`${modsDir}\\${modName}\\enabled.txt`,);
   if (shouldEnable && !isAlreadyEnabled) {
+
+    status.set({
+      name: `Enabling ${modName}`,
+      progress: 0,
+    });
+
     await writeTextFile(modEnabledFile, "");
+
+    status.set({
+      name: `Enabling ${modName}`,
+      progress: -1,
+    });
   } else if (!shouldEnable && isAlreadyEnabled) {
+
+    status.set({
+      name: `Disabling ${modName}`,
+      progress: 0,
+    });
+
     await remove(modEnabledFile);
+
+    status.set({
+      name: `Disabling ${modName}`,
+      progress: -1,
+    });
   }
 }
 
@@ -399,7 +421,7 @@ export async function editConfigVariable ({
       maxVarNameLength = Math.max(maxVarNameLength, varName.length);
       maxValueLength = Math.max(maxValueLength, (varName === variableName ? String(valueToAssign) : val).length);
 
-      if (comment.trim()) {
+      if (comment?.trim()) {
         commentsToAdd[index] = comment.trim();
       }
 
@@ -414,14 +436,14 @@ export async function editConfigVariable ({
     if (match?.groups?.varName && match?.groups?.val) {
       const { varName, val } = match.groups;
       const comment = commentsToAdd[index] ?? "";
-      newConfig[index] = `${varName}${" ".repeat(maxVarNameLength - varName.length + 1)}= ${val}${" ".repeat(maxValueLength - val.length + 1)}-- ${comment}`;
+      newConfig[index] = `${varName}${" ".repeat(maxVarNameLength - varName.length + 1)}= ${val}${" ".repeat(maxValueLength - val.length + 1)}${comment ? `-- ${comment}` : ""}`;
     }
   }
 
   await writeTextFile(modConfigPath, newConfig.join("\n"));
 
   status.set({
-    name: "Done",
+    name: "Editing config",
     progress: -1,
   });
 }

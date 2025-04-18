@@ -7,6 +7,8 @@
 	import { onMount, tick } from "svelte";
 	import { isGameRunning, modsList, status } from "$lib/client/stores";
 	import Sidebar from "../components/Sidebar.svelte";
+	import { debounce, throttle } from "lodash";
+    import { get } from "svelte/store";
 
 	afterNavigate(() => {
 		// Runs after navigating between pages
@@ -23,6 +25,7 @@
 
 	let modal: HSOverlay | null = null;
 	let isModalOpen = false;
+	let nextModalOpenState = false;
 
 	onMount(async () => {
 		const element = document.querySelector("#loading-modal") as HTMLElement;
@@ -35,10 +38,20 @@
 	});
 
 	status.subscribe((s) => {
-		if (s.progress === -1 && isModalOpen) {
+		if (s.progress === -1) {
 			modal?.close();
 			isModalOpen = false;
-		} else if (s.progress !== -1 && !isModalOpen) {
+		} else if (s.progress !== -1) {
+			modal?.open();
+			isModalOpen = true;
+		}
+	});
+
+	modsList.subscribe(() => {
+		if (get(status).progress === -1) {
+			modal?.close();
+			isModalOpen = false;
+		} else {
 			modal?.open();
 			isModalOpen = true;
 		}
@@ -57,7 +70,7 @@
 		<div class="modal-content">
 			<div class="modal-body flex flex-col items-center gap-2 overflow-hidden">
 				<div
-					class={`radial-progress transition-none after:transition-none ${$status.progress === 0 ? "animate-spin" : ""}`}
+					class={`radial-progress transition-none after:transition-none ${$status.progress <= 0 ? "animate-spin" : ""}`}
 					style={`--value:${Math.max(0, Math.round($status.progress * 100))};
        --size:8rem;
        --thickness: 0.5rem;`}
@@ -65,7 +78,7 @@
 					aria-label="60% Radial Progressbar"
 				>
 					<div
-						class={`flex flex-col items-center p-4 ${$status.progress === 0 ? "animate-reverse-spin" : ""}`}
+						class={`flex flex-col items-center p-4 ${$status.progress <= 0 ? "animate-reverse-spin" : ""}`}
 					>
 						<div class="mx-auto">
 							{Math.max(0, Math.round($status.progress * 100))}%

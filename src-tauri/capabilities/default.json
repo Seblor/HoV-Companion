@@ -95,6 +95,9 @@
       "allow": [
         {
           "path": "steam://run/3317910"
+        },
+        {
+          "path": "https://github.com/Seblor/HoV-Companion/releases/latest"
         }
       ]
     },
