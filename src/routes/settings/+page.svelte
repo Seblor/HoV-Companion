@@ -1,54 +1,59 @@
 <script lang="ts">
-  import {
-    downloadUE4SS,
-    getGamePath,
-    checkIsGamePathValid,
-    status,
-    checkIsUE4SSInstalled,
-  } from "$lib/client/queries";
-  import { open } from "@tauri-apps/plugin-dialog";
+import {
+	downloadUE4SS,
+	getGamePath,
+	checkIsGamePathValid,
+	checkIsUE4SSInstalled,
+	installCompanionMods,
+} from "$lib/client/queries";
+import { gameDir, modsDir, modsList } from "$lib/client/stores";
+import { open } from "@tauri-apps/plugin-dialog";
 
-  let gamePath = $state("");
-  let isPathValid = $state(false);
-  let isUE4SSInstalled = $state(false);
+let gamePath = $state("");
+let isPathValid = $state(false);
+let isUE4SSInstalled = $state(false);
 
-  if (localStorage.getItem("gamePath")) {
-    gamePath = localStorage.getItem("gamePath") ?? "";
-  } else {
-    getGamePath().then(async (path) => {
-      gamePath = path ?? "";
-      isPathValid = await checkIsGamePathValid(path ?? "");
-    });
-  }
+if ($gameDir) {
+	gamePath = $gameDir ?? "";
+} else {
+	updateModloaderInstallState();
+}
 
-  $effect(() => {
-    console.log("Game path changed", gamePath);
-    checkIsGamePathValid(gamePath).then((correct) => {
-      isPathValid = correct;
-      if (correct) {
-        localStorage.setItem("gamePath", gamePath);
-      }
-    });
-    checkIsUE4SSInstalled(gamePath).then((installed) => {
-      isUE4SSInstalled = installed;
-    });
-  });
+modsList.subscribe(() => {
+	checkIsUE4SSInstalled(gamePath).then((installed) => {
+		isUE4SSInstalled = installed;
+	});
+});
 
-  async function selectGameDir() {
-    const dir = await open({
-      multiple: false,
-      directory: true,
-    });
+$effect(() => {
+	checkIsGamePathValid(gamePath).then((correct) => {
+		isPathValid = correct;
+		if (correct) {
+			gameDir.set(gamePath);
+		}
+	});
+	updateModloaderInstallState();
+});
 
-    if (dir) {
-      gamePath = dir;
-    }
-  }
+async function updateModloaderInstallState() {
+	isUE4SSInstalled = await checkIsUE4SSInstalled(gamePath);
+}
+
+async function selectGameDir() {
+	const dir = await open({
+		multiple: false,
+		directory: true,
+	});
+
+	if (dir) {
+		gamePath = dir;
+	}
+}
 </script>
 
 <div class="flex flex-col grow justify-between m-2 gap-8">
   <div class="w-full flex items-center gap-4">
-    <div class="grow">
+    <div class="grow m-8">
       <label class="label-text" for="game-path">Game install path</label>
       <div class="flex gap-2">
         <input
@@ -60,7 +65,7 @@
           bind:value={gamePath}
         />
         <button
-          class="btn btn-square btn-primary btn-soft shrink"
+          class="btn btn-square btn-soft shrink"
           onclick={selectGameDir}
           aria-label="Select Game Directory"
         >
@@ -75,7 +80,7 @@
     </div>
   </div>
   <div class="divider"></div>
-  <div class="flex flex-col grow items-center gap-2">
+  <div class="flex flex-col grow items-center gap-2 m-8">
     <button
       class="btn"
       disabled={!isPathValid || isUE4SSInstalled}

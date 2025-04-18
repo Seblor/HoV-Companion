@@ -1,43 +1,33 @@
 <script lang="ts">
-    import { getDownloadLink } from "$lib/client/queries";
-  import { invoke } from "@tauri-apps/api/core";
+import { getDownloadLink } from "$lib/client/queries";
+import { invoke } from "@tauri-apps/api/core";
 
-  let name = $state("");
-  let greetMsg = $state("");
+let name = $state("");
+let greetMsg = $state("");
 
-  async function greet(event: Event) {
-    event.preventDefault();
-    // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
-    greetMsg = await invoke("greet", { name });
-  }
-
-  let downloadLink = $state("");
-
-  getDownloadLink().then((link) => {
-    console.log(link);
-    downloadLink = link ?? "";
-  });
-</script>
-
-<main class="container">
-  <h1 class="text-3xl m-2">Welcome to Tauri + Svelte</h1>
-
-  <form class="row" onsubmit={greet}>
-    <input id="greet-input" placeholder="Enter a name..." bind:value={name} />
-    <button type="submit" class="btn">Greet</button>
-  </form>
-  <p>{greetMsg}</p>
-  <p>{downloadLink}</p>
-</main>
-
-<style>
-.container {
-  margin: 0;
-  padding-top: 10vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  text-align: center;
+async function greet(event: Event) {
+	event.preventDefault();
+	// Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
+	greetMsg = await invoke("greet", { name });
 }
 
-</style>
+let downloadLink = $state("");
+
+getDownloadLink().then((link) => {
+	downloadLink = link ?? "";
+});
+</script>
+
+<main class="flex flex-col justify-center items-center size-full">
+  <h1 class="text-3xl m-2">
+    Welcome to the <span class="italic text-amber-400 font-bold"
+      >Heroes of Valor</span
+    > Companion!
+  </h1>
+  <p class="helper-text">
+    You can get started by going to the <kbd class="kbd"
+      ><a href="/settings">Settings</a></kbd
+    > section
+  </p>
+  <img src="/logo.png" alt="app logo" class="size-64" />
+</main>

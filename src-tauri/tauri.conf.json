@@ -10,14 +10,11 @@
     "frontendDist": "../build"
   },
   "app": {
-    "trayIcon": {
-      "iconPath": "icons/icon.png"
-    },
     "windows": [
       {
-        "title": "hov-companion",
-        "width": 800,
-        "height": 600
+        "title": "HoV Companion",
+        "width": 1200,
+        "height": 800
       }
     ],
     "security": {
@@ -33,7 +30,10 @@
       "icons/128x128@2x.png",
       "icons/icon.icns",
       "icons/icon.ico"
-    ]
+    ],
+    "resources": {
+      "resources/": "resources/"
+    }
   },
   "mainBinaryName": "hov-companion"
 }

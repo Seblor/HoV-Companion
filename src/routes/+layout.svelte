@@ -3,8 +3,10 @@
 	import { afterNavigate } from "$app/navigation";
 	import { HSOverlay, HSStaticMethods } from "flyonui/flyonui";
 	import { page } from "$app/state";
-	import { startGame, status } from "$lib/client/queries";
+	import { startGame } from "$lib/client/queries";
 	import { onMount, tick } from "svelte";
+	import { isGameRunning, modsList, status } from "$lib/client/stores";
+	import Sidebar from "../components/Sidebar.svelte";
 
 	afterNavigate(() => {
 		// Runs after navigating between pages
@@ -13,22 +15,23 @@
 	let { children } = $props();
 
 	let pageTitle = $derived(
-		page.url.pathname.replace("/", "").replace(/^\w/, (c) => c.toUpperCase()) ||
-			"Home",
+		page.url.pathname
+			.split("/")
+			.at(-1)
+			?.replace(/^\w/, (c) => c.toUpperCase()) || "Home",
 	);
 
 	let modal: HSOverlay | null = null;
 	let isModalOpen = false;
 
 	onMount(async () => {
-		// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-		while ((window as any).$hsOverlayCollection === undefined) {
-			await tick();
-		}
 		const element = document.querySelector("#loading-modal") as HTMLElement;
 		if (element) {
 			modal = new HSOverlay(element);
 		}
+		await tick();
+		await new Promise((resolve) => setTimeout(resolve, 100));
+		HSStaticMethods.autoInit();
 	});
 
 	status.subscribe((s) => {
@@ -81,69 +84,29 @@
 	class="flex flex-col min-w-full bg-base-100 h-screen max-h-screen justify-stretch"
 >
 	<nav
-		class="navbar bg-base-100 max-sm:rounded-box max-sm:shadow-sm sm:border-b border-base-content/25 sm:z-1 relative"
+		class="navbar bg-base-100 max-sm:rounded-box max-sm:shadow-sm sm:border-b border-base-content/25 sm:z-1 relative overflow-auto shrink-0"
 	>
-		<button
-			type="button"
-			aria-label="Menu"
-			class="btn btn-text max-sm:btn-square sm:hidden me-2"
-			aria-haspopup="dialog"
-			aria-expanded="false"
-			aria-controls="with-navbar-sidebar"
-			data-overlay="#with-navbar-sidebar"
-		>
-			<span class="icon-[tabler--menu-2] size-5"></span>
-		</button>
-		<div class="flex flex-1 items-center">
+		<div class="flex items-center w-64">
 			<!-- svelte-ignore a11y_invalid_attribute -->
 			<a
 				class="flex items-center link text-base-content link-neutral text-xl font-semibold no-underline"
-				href="#"
+				href="/"
 			>
 				<img src="/favicon.png" alt="Logo" class="h-12 w-12 me-2" />
 				HoV Companion
 			</a>
 		</div>
 		<div class="grow flex justify-center">
-			<button class="btn btn-primary" onclick={startGame}>Fight!</button>
+			<button
+				class="btn btn-primary"
+				disabled={$isGameRunning}
+				onclick={startGame}>Fight!</button
+			>
 		</div>
 	</nav>
 
 	<div class="flex grow min-h-0">
-		<aside
-			class="drawer drawer-start hidden w-64 sm:absolute sm:z-0 border-base-content/25 border-r sm:flex sm:translate-x-0 pt-22"
-			tabindex="-1"
-		>
-			<div class="drawer-body">
-				<ul class="menu space-y-0.5 p-0">
-					<li>
-						<!-- svelte-ignore a11y_invalid_attribute -->
-						<a
-							href="/settings"
-							class="px-1 rounded-2xl {pageTitle === 'Settings'
-								? 'bg-white/10 px-4'
-								: ''}"
-						>
-							<span class="icon-[tabler--settings] size-5"></span>
-							Settings
-						</a>
-					</li>
-					<div class="divider text-base-content/50">Mods</div>
-					<li>
-						<!-- svelte-ignore a11y_invalid_attribute -->
-						<a
-							href="/logging"
-							class="px-1 rounded-2xl {pageTitle === 'Logging'
-								? 'bg-white/10 px-4'
-								: ''}"
-						>
-							<span class="icon-[tabler--file-pencil] size-5"></span>
-							Logging
-						</a>
-					</li>
-				</ul>
-			</div>
-		</aside>
+		<Sidebar />
 
 		<div class="flex flex-col pl-64 min-h-0 grow bg-base-200 overflow-auto">
 			<div
@@ -155,9 +118,7 @@
 				class="flex grow overflow-auto"
 				style="height: calc(100% - var(--spacing) * 17)"
 			> -->
-			<div
-				class="flex grow overflow-auto"
-			>
+			<div class="flex grow overflow-auto">
 				{@render children()}
 			</div>
 		</div>

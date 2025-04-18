@@ -30,6 +30,7 @@
         }
       ]
     },
+    "fs:default",
     {
       "identifier": "fs:scope",
       "allow": [
@@ -38,6 +39,9 @@
         },
         {
           "path": "$DOWNLOAD/*"
+        },
+        {
+          "path": "$RESOURCE/**"
         },
         {
           "path": "**/steamapps/common/**"
@@ -49,6 +53,8 @@
     "fs:allow-read-dir",
     "fs:allow-download-write",
     "fs:allow-download-read",
+    "fs:allow-resource-read-recursive",
+    "fs:allow-resource-meta-recursive",
     {
       "identifier": "shell:allow-execute",
       "allow": [
