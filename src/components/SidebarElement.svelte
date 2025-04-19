@@ -1,31 +1,33 @@
 <script lang="ts">
-import { page } from "$app/state";
-import { setModEnabled } from "$lib/client/queries";
-import { modsDir, modsList } from "$lib/client/stores";
-import { MODS_ICONS } from "$lib/consts";
+  import { page } from "$app/state";
+  import { setModEnabled } from "$lib/client/queries";
+  import { modsDir, modsList } from "$lib/client/stores";
+  import { MODS_ICONS } from "$lib/consts";
 
-let props: {
-	modName: string;
-	isEnabled: boolean;
-} = $props<{
-	modName: string;
-	isEnabled: boolean;
-}>();
+  let props: {
+    modName: string;
+    isEnabled: boolean;
+  } = $props<{
+    modName: string;
+    isEnabled: boolean;
+  }>();
 
-let stateChanging = $state(false);
+  let stateChanging = $state(false);
 
-modsList.subscribe(() => {
-	stateChanging = false;
-});
+  modsList.subscribe(() => {
+    stateChanging = false;
+  });
 
-let pageTitle = $derived(
-	page.url.pathname
-		.split("/")
-		.at(-1)
-		?.replace(/^\w/, (c) => c.toUpperCase()) || "Home",
-);
+  let pageTitle = $derived(
+    decodeURI(
+      page.url.pathname
+        .split("/")
+        .at(-1)
+        ?.replace(/^\w/, (c) => c.toUpperCase()) || "Home",
+    ),
+  );
 
-let isManaged = $derived(MODS_ICONS[props.modName] !== undefined);
+  let isManaged = $derived(MODS_ICONS[props.modName] !== undefined);
 </script>
 
 <li class="w-full tooltip [--placement:right]">

@@ -87,7 +87,8 @@
             "-Command",
             "Get-Process -Name \"HeroesOfValor-Win64-Shipping\" -ErrorAction SilentlyContinue"
           ]
-        }, {
+        },
+        {
           "name": "force-close-game",
           "cmd": "powershell",
           "args": [
@@ -105,6 +106,9 @@
         },
         {
           "path": "https://github.com/Seblor/HoV-Companion/releases/latest"
+        },
+        {
+          "path": "$LOCALDATA/HeroesOfValor/Saved/Logs"
         }
       ]
     },

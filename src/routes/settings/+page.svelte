@@ -3,11 +3,9 @@
     downloadUE4SS,
     checkIsGamePathValid,
     checkIsUE4SSInstalled,
-    getGamePath,
   } from "$lib/client/queries";
   import { gameDir, modsDir, modsList } from "$lib/client/stores";
   import { open } from "@tauri-apps/plugin-dialog";
-  import { onMount } from "svelte";
 
   let gamePath = $state("");
   let isPathValid = $state(false);
@@ -19,13 +17,9 @@
     updateModloaderInstallState();
   }
 
-  onMount(async () => {
-    if (!$gameDir) {
-      const gamePathFound = await getGamePath();
-      if (gamePathFound) {
-        gameDir.set(gamePathFound);
-        gamePath = gamePathFound;
-      }
+  gameDir.subscribe((dir) => {
+    if (dir) {
+      gamePath = dir;
     }
   });
 

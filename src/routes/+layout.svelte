@@ -3,12 +3,12 @@
 	import { afterNavigate } from "$app/navigation";
 	import { HSOverlay, HSStaticMethods } from "flyonui/flyonui";
 	import { page } from "$app/state";
-	import { forceCloseGame, startGame } from "$lib/client/queries";
+	import { forceCloseGame, getGamePath, startGame } from "$lib/client/queries";
 	import { onMount, tick } from "svelte";
-	import { isGameRunning, modsList, status } from "$lib/client/stores";
+	import { gameDir, isGameRunning, modsList, status } from "$lib/client/stores";
 	import Sidebar from "../components/Sidebar.svelte";
 	import { get } from "svelte/store";
-    import { confirm } from "@tauri-apps/plugin-dialog";
+	import { confirm } from "@tauri-apps/plugin-dialog";
 
 	afterNavigate(() => {
 		// Runs after navigating between pages
@@ -29,6 +29,13 @@
 	let gameRunningModal: HSOverlay | null = null;
 
 	onMount(async () => {
+		if (!$gameDir) {
+			const gamePathFound = await getGamePath();
+			if (gamePathFound) {
+				gameDir.set(gamePathFound);
+			}
+		}
+
 		const loadingModalElement = document.querySelector(
 			"#loading-modal",
 		) as HTMLElement;
@@ -128,7 +135,9 @@
 					class="btn btn-error"
 					onclick={async () => {
 						if (
-							await confirm("Are you sure you want to close the game forcefully ?")
+							await confirm(
+								"Are you sure you want to close the game forcefully ?",
+							)
 						) {
 							console.log("CONFIRMED");
 							forceCloseGame();
@@ -172,7 +181,7 @@
 			<div
 				class="flex justify-center text-4xl bg-base-100/70 border-base-content/25 border-b p-3"
 			>
-				{pageTitle}
+				{decodeURI(pageTitle)}
 			</div>
 			<!-- <div
 				class="flex grow overflow-auto"
