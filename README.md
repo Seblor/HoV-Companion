@@ -6,6 +6,12 @@ A companion app for managing Heroes of Valor mods
   <img src="https://github.com/Seblor/HoV-Companion/blob/master/static/logo.png?raw=true">
 </p>
 
+## Features
+
+- **Modloader installation**: Automatically locates the game directory and installs the modloader ([EU4SS](https://github.com/UE4SS-RE/RE-UE4SS)).
+- **Mod management**: Enable/disable mods, and manage their settings.
+- **1st-party mods**: Mods that are included with the app, such as the logging mod.
+
 ## Included mods
 
 - **Logging**: Adds chat logging functionality to the game. You can choose to have a file per day or one single file.
