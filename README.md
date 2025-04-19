@@ -36,7 +36,7 @@ Example:
 
 ```lua
 enable_censor = true -- Enable censoring the chat
-censor_suernames = false -- Enable censoring the usernames
+censor_usernames = false -- Enable censoring the usernames
 
 censor_character = "*" -- Character used to censor the usernames
 max_censor_length = 3 -- Maximum consecutive censor characters
